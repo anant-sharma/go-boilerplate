@@ -7,9 +7,20 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/tkanos/gonfig"
 )
+
+/*
+Jwt Definition
+*/
+type Jwt struct {
+	Secret    string        `json:"secret"`
+	Algorithm string        `json:"algorithm"`
+	ExpiresIn time.Duration `json:"expiresIn"`
+	Issuer    string        `json:"issuer"`
+}
 
 /*
 Configuration Definition
@@ -17,6 +28,7 @@ Configuration Definition
 type Configuration struct {
 	PORT               int
 	DBConnectionString string
+	Jwt                Jwt `json:"jwt"`
 }
 
 var configuration = Configuration{}
