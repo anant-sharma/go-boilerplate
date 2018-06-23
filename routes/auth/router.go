@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
+	utils "github.com/anant-sharma/go-boilerplate/common"
+	Config "github.com/anant-sharma/go-boilerplate/config"
 	"github.com/gin-gonic/gin"
-	utils "gitlab.com/anant-sharma/go-boilerplate/common"
-	Config "gitlab.com/anant-sharma/go-boilerplate/config"
 )
 
 /*

@@ -2,8 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"gitlab.com/anant-sharma/go-boilerplate/routes/api"
-	"gitlab.com/anant-sharma/go-boilerplate/routes/auth"
+	"github.com/anant-sharma/go-boilerplate/routes/api"
+	"github.com/anant-sharma/go-boilerplate/routes/auth"
 )
 
 /*

@@ -4,9 +4,9 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/anant-sharma/go-boilerplate/config"
+	"github.com/anant-sharma/go-boilerplate/routes"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/anant-sharma/go-boilerplate/config"
-	"gitlab.com/anant-sharma/go-boilerplate/routes"
 )
 
 func main() {

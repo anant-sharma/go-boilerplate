@@ -3,8 +3,8 @@ package utils
 import (
 	"time"
 
+	Config "github.com/anant-sharma/go-boilerplate/config"
 	jwt "github.com/dgrijalva/jwt-go"
-	Config "gitlab.com/anant-sharma/go-boilerplate/config"
 )
 
 /*

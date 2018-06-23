@@ -1,8 +1,8 @@
 package apiRouter
 
 import (
+	"github.com/anant-sharma/go-boilerplate/routes/api/v1"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/anant-sharma/go-boilerplate/routes/api/v1"
 )
 
 /*

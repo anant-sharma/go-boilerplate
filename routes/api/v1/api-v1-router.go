@@ -1,8 +1,8 @@
 package v1Router
 
 import (
+	"github.com/anant-sharma/go-boilerplate/routes/api/v1/clock"
 	"github.com/gin-gonic/gin"
-	"gitlab.com/anant-sharma/go-boilerplate/routes/api/v1/clock"
 )
 
 /*
