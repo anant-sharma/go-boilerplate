@@ -1,4 +1,4 @@
-package auth
+package authcontroller
 
 import (
 	"net/http"
@@ -13,13 +13,6 @@ import (
 	Get Application Configuration
 */
 var config = Config.GetConfig()
-
-/*
-RegisterRouter Router Group
-*/
-func RegisterRouter(router *gin.RouterGroup) {
-	router.POST("/", Authenticate)
-}
 
 /*
 Authenticate function to authenticate user

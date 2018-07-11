@@ -42,13 +42,11 @@ func GetConfig() Configuration {
 }
 
 func loadConfig() {
-
 	err := gonfig.GetConf(getFileName(), &configuration)
 	if err != nil {
 		log.Fatal("Err in config file", err)
 		os.Exit(500)
 	}
-
 }
 
 func getFileName() string {

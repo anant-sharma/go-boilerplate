@@ -5,26 +5,33 @@ import (
 	"strconv"
 
 	"github.com/anant-sharma/go-boilerplate/config"
-	"github.com/anant-sharma/go-boilerplate/routes"
+	"github.com/anant-sharma/go-boilerplate/controller/auth"
+	"github.com/anant-sharma/go-boilerplate/controller/v1"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	/*
-		Get Application Configuration
-	*/
 	config := config.GetConfig()
 
-	/*
-		Create Instance of Router
-	*/
 	r := gin.Default()
 
 	/*
-		Register Router
+		Auth Routing
 	*/
-	router.Register(r.Group("/"))
+	auth := r.Group("/auth")
+	{
+		auth.POST("", authcontroller.Authenticate)
+	}
+
+	c1 := v1controller.NewController()
+	v1 := r.Group("/api/v1")
+	{
+		clock := v1.Group("/clock")
+		{
+			clock.GET("", c1.GetTimeStamp)
+		}
+	}
 
 	/*
 		Start Server
