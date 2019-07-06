@@ -60,14 +60,14 @@ func (mq *MQ) Publish(exchange string, queue string, data []byte) {
 }
 
 // CreateQueue in mq
-func (mq *MQ) CreateQueue(name string, durable bool, autoDelete bool, exclusive bool) {
+func (mq *MQ) CreateQueue(name string, durable bool, autoDelete bool, exclusive bool, noWait bool, args amqp.Table) {
 	_, err := mq.ch.QueueDeclare(
 		name,
 		durable,
 		autoDelete,
 		exclusive,
-		false,
-		nil,
+		noWait,
+		args,
 	)
 	failOnError(err, "Unable to Declare Queue")
 }
