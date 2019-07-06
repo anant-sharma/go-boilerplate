@@ -23,14 +23,16 @@ func NewMQ() MQ {
 	return MQ{}
 }
 
-func (mq *MQ) connect(connString string) {
+// Connect to MQ
+func (mq *MQ) Connect(connString string) {
 	conn, err := amqp.Dial(connString)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 	mq.conn = conn
 }
 
-func (mq *MQ) createChannel() {
+// CreateChannel With MQ
+func (mq *MQ) CreateChannel() {
 	ch, err := mq.conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
