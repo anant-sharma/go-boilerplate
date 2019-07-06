@@ -29,6 +29,7 @@ type Configuration struct {
 	PORT               int
 	DBConnectionString string
 	Jwt                Jwt `json:"jwt"`
+	MQConnectionString string
 }
 
 var configuration = Configuration{}
