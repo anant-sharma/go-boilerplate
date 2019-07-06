@@ -1,6 +1,7 @@
 package mq
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/streadway/amqp"
@@ -46,15 +47,18 @@ func (mq *MQ) CreateExchange(name string, kind string, durable bool) {
 }
 
 // Publish message
-func (mq *MQ) Publish(exchange string, queue string, data []byte) {
+func (mq *MQ) Publish(exchange string, queue string, data interface{}) {
+	body, merr := json.Marshal(data)
+	failOnError(merr, "Unable to Marshal Data")
+
 	err := mq.ch.Publish(
 		exchange,
 		queue,
 		false,
 		false,
 		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte(data),
+			ContentType: "application/json",
+			Body:        body,
 		})
 	failOnError(err, "Unable to Publish Message")
 }
@@ -73,7 +77,10 @@ func (mq *MQ) CreateQueue(name string, durable bool, autoDelete bool, exclusive 
 }
 
 // WriteToQueue function
-func (mq *MQ) WriteToQueue(queue string, data []byte) {
+func (mq *MQ) WriteToQueue(queue string, data interface{}) {
+	body, merr := json.Marshal(data)
+	failOnError(merr, "Unable to Marshal Data")
+
 	err := mq.ch.Publish(
 		"",
 		queue,
@@ -81,7 +88,8 @@ func (mq *MQ) WriteToQueue(queue string, data []byte) {
 		false,
 		amqp.Publishing{
 			DeliveryMode: amqp.Persistent,
-			Body:         []byte(data),
+			ContentType:  "application/json",
+			Body:         body,
 		})
 	failOnError(err, "Unable to write to queue")
 }
