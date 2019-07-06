@@ -20,15 +20,7 @@ func failOnError(err error, msg string) {
 
 // NewMQ to Initialize MQ
 func NewMQ() MQ {
-	mq := MQ{}
-
-	// Create Connection
-	mq.connect()
-
-	// Create Channel
-	mq.createChannel()
-
-	return mq
+	return MQ{}
 }
 
 func (mq *MQ) connect(connString string) {
