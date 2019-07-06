@@ -87,13 +87,13 @@ func (mq *MQ) WriteToQueue(queue string, data []byte) {
 }
 
 // BindQueueWithExchange function
-func (mq *MQ) BindQueueWithExchange(queue string, exchange string) {
+func (mq *MQ) BindQueueWithExchange(queue string, exchange string, key string, args amqp.Table) {
 	err := mq.ch.QueueBind(
 		queue,
-		"",
+		key,
 		exchange,
 		false,
-		nil,
+		args,
 	)
 	failOnError(err, "Unable to bind queue to exchange")
 }
