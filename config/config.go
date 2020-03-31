@@ -3,61 +3,52 @@ package config
 import (
 	"log"
 	"os"
-	"path"
-	"path/filepath"
-	"runtime"
-	"strings"
+	"strconv"
 	"time"
 
-	"github.com/tkanos/gonfig"
+	"github.com/joho/godotenv"
 )
 
-/*
-Jwt Definition
-*/
+// Jwt Definition
 type Jwt struct {
-	Secret    string        `json:"secret"`
-	Algorithm string        `json:"algorithm"`
-	ExpiresIn time.Duration `json:"expiresIn"`
-	Issuer    string        `json:"issuer"`
+	Secret    string
+	Algorithm string
+	ExpiresIn time.Duration
+	Issuer    string
 }
 
-/*
-Configuration Definition
-*/
+// Configuration Definition
 type Configuration struct {
 	PORT               int
 	DBConnectionString string
-	Jwt                Jwt `json:"jwt"`
-	MQConnectionString string
+	Jwt                Jwt
 }
-
-var configuration = Configuration{}
 
 /*
 GetConfig - Return config
 */
 func GetConfig() Configuration {
 	loadConfig()
-	return configuration
+
+	appPort, _ := strconv.Atoi(os.Getenv("PORT"))
+	jwtExpiresIn, _ := strconv.ParseInt(os.Getenv("jwt.expiresIn"), 10, 0)
+
+	return Configuration{
+		PORT:               appPort,
+		DBConnectionString: os.Getenv("DBConnectionString"),
+		Jwt: Jwt{
+			Secret:    os.Getenv("jwt.secret"),
+			Algorithm: os.Getenv("jwt.secret"),
+			ExpiresIn: time.Duration(jwtExpiresIn),
+			Issuer:    os.Getenv("jwt.issuer"),
+		},
+	}
 }
 
 func loadConfig() {
-	err := gonfig.GetConf(getFileName(), &configuration)
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Err in config file", err)
+		log.Fatal("Error loading .env file: ", err)
 		os.Exit(500)
 	}
-}
-
-func getFileName() string {
-	env := os.Getenv("ENV")
-	if len(env) == 0 {
-		env = "development"
-	}
-	filename := []string{"config.", env, ".json"}
-	_, dirname, _, _ := runtime.Caller(0)
-	filePath := path.Join(filepath.Dir(dirname), strings.Join(filename, ""))
-
-	return filePath
 }
