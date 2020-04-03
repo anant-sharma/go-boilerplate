@@ -1,0 +1,51 @@
+name: Go
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Install Packages
+        run: sudo apt-get install -y curl jq
+
+      - name: Build and Push Image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+          repository: ${{secrets.DOCKER_USER}}/${{secrets.REPO_NAME}}
+          tags: latest
+
+      - name: Deploy to Chip Cluster
+        if: success()
+        run: |
+          AUTH_TOKEN=$(curl -XPOST ${CLUSTER_API_URL}/auth -d "{\"Username\":\"${CLUSTER_USER}\",\"Password\":\"${CLUSTER_PASS}\"}" | jq -r '.jwt')
+          curl -N -XPOST ${CLUSTER_API_URL}/endpoints/1/docker/images/create?fromImage=${DOCKER_USER}/${REPO_NAME}\&tag=${TAG} --header "Authorization: Bearer ${AUTH_TOKEN}"
+          curl -XDELETE ${CLUSTER_API_URL}/endpoints/1/docker/containers/${REPO_NAME}?v=true\&force=true --header "Authorization: Bearer ${AUTH_TOKEN}"
+          curl -XPOST ${CLUSTER_API_URL}/endpoints/1/docker/containers/create?name=${REPO_NAME} --header "Authorization:Bearer ${AUTH_TOKEN}" --header 'content-type:application/json' -d "{\"Image\": \"${DOCKER_USER}/${REPO_NAME}:${TAG}\",\"ExposedPorts\": {\"8080/tcp\": {}},\"HostConfig\": {\"PortBindings\": {\"8080/tcp\": [{\"HostPort\": \"${HOST_PORT}\"}]},\"PublishAllPorts\": true,\"AutoRemove\": true,\"NetworkMode\": \"bridge\"},\"name\": \"${REPO_NAME}\"}"
+          curl -XPOST ${CLUSTER_API_URL}/endpoints/1/docker/containers/${REPO_NAME}/start --header "Authorization: Bearer ${AUTH_TOKEN}"
+        env:
+          CLUSTER_API_URL: ${{ secrets.CLUSTER_API_URL }}
+          CLUSTER_USER: ${{ secrets.CLUSTER_USER }}
+          CLUSTER_PASS: ${{ secrets.CLUSTER_PASS }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          REPO_NAME: ${{ secrets.REPO_NAME }}
+          HOST_PORT: 32767
+          TAG: latest
+
+      - name: Slack Notification
+        uses: 8398a7/action-slack@v2
+        if: always()
+        with:
+          status: ${{ job.status }}
+          author_name: ${{ env.GITHUB_ACTOR }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
