@@ -1,15 +1,15 @@
 package v1controller
 
 import (
-	"net/http"
+	"context"
 	"time"
 
-	"github.com/gin-gonic/gin"
+	"github.com/anant-sharma/go-boilerplate/structs"
 )
 
 // GetTimeStamp Method
-func (c *Controller) GetTimeStamp(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"timestamp": time.Now(),
-	})
+func GetTimeStamp(c context.Context) structs.Clock {
+	return structs.Clock{
+		Timestamp: time.Now(),
+	}
 }
