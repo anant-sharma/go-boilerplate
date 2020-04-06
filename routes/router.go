@@ -24,6 +24,7 @@ func InitRouter() {
 	})
 
 	r.Use(middleware.AuthenticationRequired())
+	r.Use(middleware.Cors())
 
 	v1 := r.Group("/api/v1")
 	v1Router.InitRouter(v1)
