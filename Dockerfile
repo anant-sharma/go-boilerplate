@@ -23,7 +23,7 @@ RUN CGO_ENABLED=0 go build -o /go-app
 ##############################
 # STEP 2 build a small image #
 ##############################
-FROM scratch
+FROM busybox
 
 # Copy our static executable.
 COPY --from=builder /go-app /go-app
