@@ -25,6 +25,8 @@ RUN CGO_ENABLED=0 go build -o /go-app
 ##############################
 FROM golang:alpine
 
+WORKDIR /
+
 # Copy our static executable.
 COPY --from=builder /go-app /go-app
 COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/.env /.env
