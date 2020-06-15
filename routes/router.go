@@ -1,9 +1,13 @@
 package router
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"strconv"
+	"time"
 
 	"github.com/anant-sharma/go-boilerplate/config"
 	"github.com/anant-sharma/go-boilerplate/controller/health"
@@ -29,10 +33,32 @@ func InitRouter() {
 	v1 := r.Group("/api/v1")
 	v1Router.InitRouter(v1)
 
-	// Start Server
-	err := r.Run(":" + strconv.Itoa(config.PORT))
-	if err != nil {
-		log.Fatal(err)
+	// Setup Server
+	srv := &http.Server{
+		Addr:    ":" + strconv.Itoa(config.PORT),
+		Handler: r,
 	}
+
+	go func() {
+		// Start Server
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal("Error Starting Server: ", err)
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server with
+	// a timeout of 5 seconds.
+	quit := make(chan os.Signal)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	log.Println("Shutting Down Server ...")
+
+	// Close Server
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatal("Server Shutdown Error:", err)
+	}
+	log.Println("Server Shutdown Complete.")
 
 }
