@@ -2,53 +2,39 @@ package config
 
 import (
 	"log"
-	"os"
-	"strconv"
-	"time"
 
-	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 )
 
-// Jwt Definition
-type Jwt struct {
-	Secret    string
-	Algorithm string
-	ExpiresIn time.Duration
-	Issuer    string
-}
-
-// Configuration Definition
-type Configuration struct {
-	PORT               int
-	DBConnectionString string
-	Jwt                Jwt
-}
-
-/*
-GetConfig - Return config
-*/
-func GetConfig() Configuration {
-	loadConfig()
-
-	appPort, _ := strconv.Atoi(os.Getenv("PORT"))
-	jwtExpiresIn, _ := strconv.ParseInt(os.Getenv("jwt.expiresIn"), 10, 0)
-
-	return Configuration{
-		PORT:               appPort,
-		DBConnectionString: os.Getenv("DBConnectionString"),
-		Jwt: Jwt{
-			Secret:    os.Getenv("jwt.secret"),
-			Algorithm: os.Getenv("jwt.secret"),
-			ExpiresIn: time.Duration(jwtExpiresIn),
-			Issuer:    os.Getenv("jwt.issuer"),
-		},
+type config struct {
+	Grpc struct {
+		Host string
+		Port int
 	}
 }
 
-func loadConfig() {
-	err := godotenv.Load()
+// C - Config Instance
+var C config
+
+// Load - Loads config
+func Load() {
+	// Set the path to look for the configurations file
+	viper.AddConfigPath("config")
+
+	// Set the file name of the configurations file
+	viper.SetConfigName("")
+
+	// Enable VIPER to read Environment Variables
+	viper.AutomaticEnv()
+
+	viper.SetConfigType("yaml")
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Printf("Error reading config file, %s", err)
+	}
+
+	err := viper.Unmarshal(&C)
 	if err != nil {
-		log.Fatal("Error loading .env file: ", err)
-		os.Exit(500)
+		log.Fatalf("Unable to load config to struct, %v", err)
 	}
 }

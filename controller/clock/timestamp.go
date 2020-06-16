@@ -1,4 +1,4 @@
-package v1controller
+package clock
 
 import (
 	"context"

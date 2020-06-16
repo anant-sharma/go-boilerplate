@@ -3,13 +3,22 @@ package main
 import (
 	"log"
 
-	router "github.com/anant-sharma/go-boilerplate/routes"
+	"github.com/anant-sharma/go-boilerplate/config"
+	"github.com/anant-sharma/go-boilerplate/server"
 )
 
 func main() {
-
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	router.InitRouter()
+	config.Load()
 
+	quit := make(chan bool, 1)
+
+	go func() {
+		server.Start()
+		quit <- true
+	}()
+
+	<-quit
+	log.Println("Exiting Main ...")
 }
