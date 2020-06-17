@@ -7,6 +7,7 @@ FROM golang:alpine AS builder
 # Install Dependencies
 RUN apk update
 RUN apk add --no-cache git
+RUN apk add make
 
 # Set the Current Working Directory inside the container
 WORKDIR $GOPATH/src/github.com/anant-sharma/go-boilerplate
@@ -16,6 +17,10 @@ COPY . .
 
 # Download all the dependencies
 RUN go get -d -v ./...
+
+RUN make install
+
+RUN make generate
 
 # Build Binary
 RUN CGO_ENABLED=0 go build -o /go-app
@@ -29,10 +34,11 @@ WORKDIR /
 
 # Copy our static executable.
 COPY --from=builder /go-app /go-app
-COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/.env /.env
+COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/config/config.yml /config/config.yml
 
 # Expose Application Port(s) separated by comma
 EXPOSE 8080
+EXPOSE 50052
 
 # Run the go-app binary.
 ENTRYPOINT ["./go-app"]

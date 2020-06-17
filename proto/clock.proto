@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package clock;
+option go_package = ".;proto";
+
+import "google/api/annotations.proto";
+
+message GetHealthRequest {}
+message GetHealthResponse { bool isHealthy = 1; }
+
+message GetTimestampRequest {}
+message GetTimestampResponse { string timestamp = 1; }
+
+service ClockService {
+  rpc GetHealth(GetHealthRequest) returns (GetHealthResponse) {
+    option (google.api.http) = {
+      get : "/heahthz"
+    };
+  };
+  rpc GetTimestamp(GetTimestampRequest) returns (GetTimestampResponse) {
+    option (google.api.http) = {
+      get : "/clock"
+    };
+  };
+}

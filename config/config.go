@@ -11,6 +11,10 @@ type config struct {
 		Host string
 		Port int
 	}
+	Http struct {
+		Host string
+		Port int
+	}
 }
 
 // C - Config Instance
