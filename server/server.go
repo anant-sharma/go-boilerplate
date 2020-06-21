@@ -19,7 +19,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	// Static files
-	_ "github.com/anant-sharma/go-boilerplate/statik"
+	_ "github.com/anant-sharma/go-boilerplate/third_party/statik"
 )
 
 type server struct{}
