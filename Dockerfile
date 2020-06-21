@@ -38,7 +38,7 @@ COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/config/config
 
 # Expose Application Port(s) separated by comma
 EXPOSE 8080
-EXPOSE 50052
+EXPOSE 50051
 
 # Run the go-app binary.
 ENTRYPOINT ["./go-app"]
