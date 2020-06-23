@@ -35,6 +35,8 @@ RUN CGO_ENABLED=0 go build -o /go-app
 ##############################
 FROM golang:alpine
 
+RUN apk add --no-cache curl
+
 WORKDIR /
 
 # Copy our static executable.
