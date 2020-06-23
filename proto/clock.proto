@@ -14,7 +14,7 @@ message GetTimestampResponse { string timestamp = 1; }
 service ClockService {
   rpc GetHealth(GetHealthRequest) returns (GetHealthResponse) {
     option (google.api.http) = {
-      get : "/heahthz"
+      get : "/healthz"
     };
   };
   rpc GetTimestamp(GetTimestampRequest) returns (GetTimestampResponse) {
