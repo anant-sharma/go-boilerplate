@@ -47,5 +47,8 @@ COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/statik /stati
 EXPOSE 8080
 EXPOSE 50051
 
+# Health Check
+HEALTHCHECK --interval=5s --timeout=3s CMD curl --fail http://localhost:8080/healthz || exit 1
+
 # Run the go-app binary.
 ENTRYPOINT ["./go-app"]
