@@ -16,7 +16,7 @@
 
 # Proto Generated Files
 proto/*.go
-proto/*.json
+third_party/OpenAPI/*.swagger.json
 
 # Static Files for Open API
 statik/

@@ -20,7 +20,6 @@ generate:
 		--go_out=plugins=grpc,paths=source_relative:./proto \
 		--grpc-gateway_out=logtostderr=true,paths=source_relative:./proto \
 		--openapiv2_out=third_party/OpenAPI/ \
-		--swagger_out=logtostderr=true:./proto \
 		proto/clock.proto
 
 	# Generate static assets for OpenAPI UI
@@ -29,7 +28,6 @@ generate:
 install:
 	go get \
 		github.com/golang/protobuf/protoc-gen-go \
-		github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger \
 		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
 		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
 		github.com/rakyll/statik
