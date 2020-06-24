@@ -24,6 +24,23 @@ import (
 
 type server struct{}
 
+func gatewayHandler(mux, oaHandler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasPrefix(r.URL.Path, "/swagger") {
+
+			if r.URL.Path == "/swagger" {
+				http.Redirect(w, r, "/swagger/", http.StatusMovedPermanently)
+				return
+			}
+
+			oaHandler.ServeHTTP(w, r)
+			return
+		}
+
+		mux.ServeHTTP(w, r)
+	})
+}
+
 // Start - Method to Start gRPC server
 func Start() {
 	hostAddress := strings.Join([]string{
@@ -98,21 +115,8 @@ func startHTTPProxy(endpoint string) error {
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	gwServer := &http.Server{
-		Addr: hostAddress,
-		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/swagger") {
-
-				if r.URL.Path == "/swagger" {
-					http.Redirect(w, r, "/swagger/", http.StatusMovedPermanently)
-					return
-				}
-
-				oaHandler.ServeHTTP(w, r)
-				return
-			}
-
-			mux.ServeHTTP(w, r)
-		}),
+		Addr:    hostAddress,
+		Handler: tracing(logging(gatewayHandler(mux, oaHandler))),
 	}
 
 	log.Printf("Serving gRPC-Gateway on http://%s", hostAddress)
