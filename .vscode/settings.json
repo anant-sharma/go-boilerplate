@@ -1,0 +1,10 @@
+{
+	"protoc": {
+		"path": "protoc",
+		"options": [
+			"--proto_path=proto",
+			"--proto_path=third_party/grpc-gateway/",
+			"--proto_path=third_party/googleapis"
+		]
+	}
+}
