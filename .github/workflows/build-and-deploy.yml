@@ -18,7 +18,7 @@ jobs:
 
       - name: Build and Push Image
         if: success()
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           username: ${{ steps.configfetch.outputs.DOCKER_USER }}
           password: ${{ steps.configfetch.outputs.DOCKER_PASS }}
