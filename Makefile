@@ -12,15 +12,15 @@ generate:
 	# --grpc-gateway_out generates gRPC-Gateway output.
 	# --openapiv2_out generates an OpenAPI 2.0 specification for our gRPC-Gateway endpoints.
 	#
-	# proto/.proto is the location of the protofile we use.
+	# protos/clock.proto is the location of the protofile we use.
 	protoc \
-		-I proto \
+		-I protos \
 		-I third_party/grpc-gateway/ \
 		-I third_party/googleapis \
-		--go_out=plugins=grpc,paths=source_relative:./proto \
-		--grpc-gateway_out=logtostderr=true,paths=source_relative:./proto \
+		--go_out=plugins=grpc,paths=source_relative:./protos \
+		--grpc-gateway_out=logtostderr=true,paths=source_relative:./protos \
 		--openapiv2_out=third_party/OpenAPI/ \
-		proto/clock.proto
+		protos/clock.proto
 
 	# Generate static assets for OpenAPI UI
 	statik -m -f -src third_party/OpenAPI/

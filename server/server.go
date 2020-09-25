@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/anant-sharma/go-boilerplate/config"
-	"github.com/anant-sharma/go-boilerplate/proto"
+	"github.com/anant-sharma/go-boilerplate/protos"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rakyll/statik/fs"
 	"google.golang.org/grpc"
@@ -55,7 +55,7 @@ func Start() {
 	}
 
 	s := grpc.NewServer()
-	proto.RegisterClockServiceServer(s, &server{})
+	protos.RegisterClockServiceServer(s, &server{})
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
 
@@ -98,7 +98,7 @@ func startHTTPProxy(endpoint string) error {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 
 	// Register Service
-	err := proto.RegisterClockServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
+	err := protos.RegisterClockServiceHandlerFromEndpoint(ctx, mux, endpoint, opts)
 	if err != nil {
 		return err
 	}

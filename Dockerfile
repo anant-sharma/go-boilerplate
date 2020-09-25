@@ -42,7 +42,7 @@ WORKDIR /
 # Copy our static executable.
 COPY --from=builder /go-app /go-app
 COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/config/config.yml /config/config.yml
-COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/proto /proto
+COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/protos /protos
 COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/statik /statik
 
 # Expose Application Port(s) separated by comma
