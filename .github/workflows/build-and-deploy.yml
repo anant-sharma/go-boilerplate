@@ -15,15 +15,19 @@ jobs:
         uses: anant-sharma/chip-config-fetch@v2.8.0
         with:
           access_token: ${{ secrets.ACCESS_TOKEN }}
+      
+      - name: Login to Dockerhub
+        if: success()
+        uses: docker/login-action@v1
+        with:
+          username: ${{ steps.configfetch.outputs.DOCKER_USER }}
+          password: ${{ steps.configfetch.outputs.DOCKER_PASS }}
 
       - name: Build and Push Image
         if: success()
         uses: docker/build-push-action@v2
         with:
-          username: ${{ steps.configfetch.outputs.DOCKER_USER }}
-          password: ${{ steps.configfetch.outputs.DOCKER_PASS }}
-          repository: ${{steps.configfetch.outputs.DOCKER_USER}}/${{steps.configfetch.outputs.DOCKER_IMAGE_NAME}}
-          tags: ${{steps.configfetch.outputs.TAG}}
+          tags: ${{steps.configfetch.outputs.DOCKER_USER}}/${{steps.configfetch.outputs.DOCKER_IMAGE_NAME}}:${{steps.configfetch.outputs.TAG}}
 
       - name: Deploy to Chip Cluster
         if: success()
