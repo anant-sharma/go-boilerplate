@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"log"
 	"net"
 	"os"
@@ -10,6 +11,8 @@ import (
 
 	"github.com/anant-sharma/go-boilerplate/config"
 	"github.com/anant-sharma/go-boilerplate/protos"
+	"github.com/anant-sharma/go-utils"
+	opentracing "github.com/anant-sharma/go-utils/open-tracing"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -32,7 +35,9 @@ func Start() {
 		return
 	}
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		withServerUnaryInterceptor(),
+	)
 	protos.RegisterClockServiceServer(s, &server{})
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
@@ -64,4 +69,23 @@ func Start() {
 	lis.Close()
 
 	log.Println("Server Shutdown Complete.")
+}
+
+func withServerUnaryInterceptor() grpc.ServerOption {
+	return grpc.UnaryInterceptor(serverInterceptor)
+}
+
+func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+
+	// Start Open Tracing Span
+	reqID := utils.GenerateShortID()
+	span, c := opentracing.StartSpanFromContext(ctx, reqID)
+	span.SetTag("X-Request-ID", reqID)
+	span.SetTag("Method", info.FullMethod)
+	defer span.Finish()
+
+	// Calls the handler
+	h, err := handler(c, req)
+
+	return h, err
 }

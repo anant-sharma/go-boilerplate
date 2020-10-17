@@ -3,7 +3,9 @@ module github.com/anant-sharma/go-boilerplate
 go 1.14
 
 require (
-	github.com/anant-sharma/go-utils v0.0.0-20200420084213-30e55518f10d
+	github.com/HdrHistogram/hdrhistogram-go v0.9.0 // indirect
+	github.com/anant-sharma/go-utils v0.0.0-20201017120411-ecb33094bf00
+	github.com/codahale/hdrhistogram v0.9.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/golang/protobuf v1.4.3
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.0.0-beta.5
