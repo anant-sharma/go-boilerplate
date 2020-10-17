@@ -15,7 +15,7 @@
 # vendor/
 
 # Proto Generated Files
-proto/*.go
+protos/*.go
 third_party/OpenAPI/*.swagger.json
 
 # Static Files for Open API
