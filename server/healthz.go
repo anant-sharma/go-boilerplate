@@ -8,7 +8,7 @@ import (
 )
 
 func (*server) GetHealth(ctx context.Context, _ *protos.GetHealthRequest) (*protos.GetHealthResponse, error) {
-	span := opentracing.CreateChildSpanFromContext(ctx, "GetHealth")
+	span := opentracing.CreateChildSpanFromContext(ctx, "server.GetHealth")
 	defer span.Finish()
 
 	return &protos.GetHealthResponse{
