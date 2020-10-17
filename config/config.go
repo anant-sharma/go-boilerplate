@@ -11,7 +11,7 @@ type config struct {
 		Host string
 		Port int
 	}
-	Http struct {
+	HTTP struct {
 		Host string
 		Port int
 	}

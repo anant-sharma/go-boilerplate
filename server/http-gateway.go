@@ -49,8 +49,8 @@ func startHTTPProxy(endpoint string) error {
 	oaHandler := http.StripPrefix("/swagger/", getOpenAPIHandler())
 
 	hostAddress := strings.Join([]string{
-		config.C.Http.Host,
-		strconv.Itoa(config.C.Http.Port),
+		config.C.HTTP.Host,
+		strconv.Itoa(config.C.HTTP.Port),
 	}, ":")
 
 	log.Println("Starting HTTP Proxy on", hostAddress)
