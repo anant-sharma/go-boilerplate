@@ -78,9 +78,8 @@ func withServerUnaryInterceptor() grpc.ServerOption {
 func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 
 	// Start Open Tracing Span
-	reqID := utils.GenerateShortID()
-	span, c := opentracing.StartSpanFromContext(ctx, reqID)
-	span.SetTag("X-Request-ID", reqID)
+	span, c := opentracing.StartSpanFromContext(ctx, info.FullMethod)
+	span.SetTag("X-Request-ID", utils.GenerateShortID())
 	span.SetTag("Method", info.FullMethod)
 	defer span.Finish()
 
