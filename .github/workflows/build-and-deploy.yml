@@ -12,7 +12,7 @@ jobs:
 
       - name: Fetch Config
         id: configfetch
-        uses: anant-sharma/chip-config-fetch@v2.8.0
+        uses: anant-sharma/chip-config-fetch@v2.9.0
         with:
           access_token: ${{ secrets.ACCESS_TOKEN }}
       
@@ -37,7 +37,7 @@ jobs:
 
       - name: Deploy to Chip Cluster
         if: success()
-        uses: anant-sharma/chip-config-fetch@v2.8.0
+        uses: anant-sharma/chip-config-fetch@v2.9.0
         with:
           access_token: ${{ secrets.ACCESS_TOKEN }}
           deploy: "1"
