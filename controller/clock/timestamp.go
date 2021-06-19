@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"github.com/anant-sharma/go-boilerplate/structs"
-	opentracing "github.com/anant-sharma/go-utils/open-tracing"
+	newrelictracing "github.com/anant-sharma/go-utils/new-relic/tracing"
 )
 
 // GetTimeStamp Method
 func GetTimeStamp(ctx context.Context) structs.Clock {
-	span := opentracing.CreateChildSpanFromContext(ctx, "controller.clock.GetTimestamp")
-	defer span.Finish()
+	segment, _ := newrelictracing.NewSegment(ctx, "controller.clock.GetTimestamp")
+	defer segment.End()
 
 	return structs.Clock{
 		Timestamp: time.Now(),

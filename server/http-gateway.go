@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -10,6 +9,7 @@ import (
 	"github.com/anant-sharma/go-boilerplate/config"
 	"github.com/anant-sharma/go-boilerplate/protos"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
@@ -58,7 +58,7 @@ func startHTTPProxy(endpoint string) error {
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	gwServer := &http.Server{
 		Addr:    hostAddress,
-		Handler: tracing(logging(gatewayHandler(mux, oaHandler))),
+		Handler: apm(tracing(logging(gatewayHandler(mux, oaHandler)))),
 	}
 
 	log.Printf("Serving gRPC-Gateway on http://%s", hostAddress)

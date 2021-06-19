@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"log"
 	"net"
 	"os"
 	"os/signal"
@@ -12,7 +11,8 @@ import (
 	"github.com/anant-sharma/go-boilerplate/config"
 	"github.com/anant-sharma/go-boilerplate/protos"
 	"github.com/anant-sharma/go-utils"
-	opentracing "github.com/anant-sharma/go-utils/open-tracing"
+	newrelictracing "github.com/anant-sharma/go-utils/new-relic/tracing"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
@@ -76,12 +76,10 @@ func withServerUnaryInterceptor() grpc.ServerOption {
 }
 
 func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-
-	// Start Open Tracing Span
-	span, c := opentracing.StartSpanFromContext(ctx, info.FullMethod)
-	span.SetTag("X-Request-ID", utils.GenerateShortID())
-	span.SetTag("Method", info.FullMethod)
-	defer span.Finish()
+	txn, c := newrelictracing.NewTransaction(ctx, info.FullMethod)
+	txn.AddAttribute("X-Request-ID", utils.GenerateShortID())
+	txn.AddAttribute("Method", info.FullMethod)
+	defer txn.End()
 
 	// Calls the handler
 	h, err := handler(c, req)

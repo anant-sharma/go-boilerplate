@@ -1,8 +1,8 @@
 package config
 
 import (
-	"log"
-
+	newrelictracing "github.com/anant-sharma/go-utils/new-relic/tracing"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -15,6 +15,7 @@ type config struct {
 		Host string
 		Port int
 	}
+	NewRelic newrelictracing.Config
 }
 
 // C - Config Instance
