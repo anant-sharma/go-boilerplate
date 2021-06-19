@@ -1,6 +1,8 @@
 package config
 
 import (
+	"strings"
+
 	newrelictracing "github.com/anant-sharma/go-utils/new-relic/tracing"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -31,6 +33,9 @@ func Load() {
 
 	// Enable VIPER to read Environment Variables
 	viper.AutomaticEnv()
+
+	// Convert _ underscore in env to . dot notation in viper
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	viper.SetConfigType("yaml")
 

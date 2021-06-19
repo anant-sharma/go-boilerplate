@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"log"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/anant-sharma/go-boilerplate/config"
 	"github.com/anant-sharma/go-boilerplate/server"
@@ -12,8 +13,6 @@ import (
 )
 
 func main() {
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-
 	config.Load()
 
 	otracingErr := opentracing.Init(context.Background(), "go-boilerplate")
