@@ -1,5 +1,6 @@
-name: Build and Deploy
+name: Build
 on:
+  workflow_dispatch:
   push:
     branches: [master]
 jobs:
@@ -33,14 +34,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{steps.configfetch.outputs.DOCKER_USER}}/${{steps.configfetch.outputs.DOCKER_IMAGE_NAME}}:${{steps.configfetch.outputs.TAG}}
-
-      - name: Deploy to Chip Cluster
-        if: success()
-        uses: anant-sharma/chip-config-fetch@v2.9.0
-        with:
-          access_token: ${{ secrets.ACCESS_TOKEN }}
-          deploy: "1"
+          tags: |
+            ${{steps.configfetch.outputs.DOCKER_USER}}/${{steps.configfetch.outputs.DOCKER_IMAGE_NAME}}:${{steps.configfetch.outputs.TAG}}
+            ${{steps.configfetch.outputs.DOCKER_USER}}/${{steps.configfetch.outputs.DOCKER_IMAGE_NAME}}:${{github.sha}}
 
       - name: Slack Notification
         uses: 8398a7/action-slack@v2
