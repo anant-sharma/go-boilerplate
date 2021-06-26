@@ -13,11 +13,7 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-go.sum
 
 # Proto Generated Files
 protos/*.go
 third_party/OpenAPI/*.swagger.json
-
-# Static Files for Open API
-statik/

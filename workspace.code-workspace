@@ -4,6 +4,9 @@
 			"path": "."
 		},
 		{
+			"path": "../go-boilerplate-utils"
+		},
+		{
 			"path": "../go-utils"
 		}
 	],

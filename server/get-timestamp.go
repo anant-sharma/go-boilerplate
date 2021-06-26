@@ -21,3 +21,15 @@ func (*server) GetTimestamp(ctx context.Context, _ *protos.GetTimestampRequest) 
 		Timestamp: clock.GetTimeStamp(ctxWithSegment).Timestamp.Format(time.RFC3339),
 	}, nil
 }
+
+func (*server) GetNewTimestamp(ctx context.Context, _ *protos.GetTimestampRequest) (*protos.GetTimestampResponse, error) {
+	// span := opentracing.CreateChildSpanFromContext(ctx, "server.GetTimestamp")
+	// defer span.Finish()
+
+	segment, ctxWithSegment := newrelictracing.NewSegment(ctx, "server.GetTimestamp")
+	defer segment.End()
+
+	return &protos.GetTimestampResponse{
+		Timestamp: clock.GetTimeStamp(ctxWithSegment).Timestamp.Format(time.RFC3339),
+	}, nil
+}

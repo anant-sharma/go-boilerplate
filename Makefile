@@ -22,12 +22,8 @@ generate:
 		--openapiv2_out=third_party/OpenAPI/ \
 		protos/clock.proto
 
-	# Generate static assets for OpenAPI UI
-	statik -m -f -src third_party/OpenAPI/
-
 install:
 	go get \
 		github.com/golang/protobuf/protoc-gen-go \
 		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway \
-		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2 \
-		github.com/rakyll/statik
+		github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2

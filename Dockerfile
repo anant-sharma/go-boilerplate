@@ -43,7 +43,7 @@ WORKDIR /
 COPY --from=builder /go-app /go-app
 COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/config/config.yml /config/config.yml
 COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/protos /protos
-COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/statik /statik
+COPY --from=builder /go/src/github.com/anant-sharma/go-boilerplate/third_party/OpenAPI /third_party/OpenAPI
 
 # Expose Application Port(s) separated by comma
 EXPOSE 8080
